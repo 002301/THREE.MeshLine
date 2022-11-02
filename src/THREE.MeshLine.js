@@ -75,10 +75,17 @@
   // as you're creating a unecessary geometry just to throw away
   // but exists to support previous api
   MeshLine.prototype.setGeometry = function(g, c) {
-		// as the input geometry are mutated we store them
+    // as the input geometry are mutated we store them
 		// for later retreival when necessary (declaritive architectures)
 		this._geometry = g;
-        this.setPoints(g.getAttribute("position").array, c);
+    // this.setPoints(g.getAttribute("position").array, c);
+    if (g instanceof THREE.Geometry) {
+      this.setPoints(g.vertices, c);
+    } else if (g instanceof THREE.BufferGeometry) {
+      this.setPoints(g.getAttribute("position").array, c);
+    } else {
+      this.setPoints(g, c);
+    }
   }
 
   MeshLine.prototype.setPoints = function(points, wcb) {
